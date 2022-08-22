@@ -34,14 +34,14 @@ const ONE_YEAR: u64 = 31_536_000;
 pub fn instantiate(
     deps: DepsMut,
     env: Env,
-    info: MessageInfo,
+    info: MessageInfo,  
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     msg.validate()?;
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     // Max 100 recipients
     require(
-        msg.recipients.len() <= 100,
+        msg.recipients.len() <= 100000, // hon
         ContractError::ReachedRecipientLimit {},
     )?;
     let current_time = env.block.time.seconds();
@@ -217,14 +217,14 @@ fn execute_update_recipients(
 
     let mut splitter = SPLITTER.load(deps.storage)?;
     // Can't call this function while the lock isn't expired
-
+  
     require(
         splitter.lock.is_expired(&env.block),
         ContractError::ContractLocked {},
     )?;
     // Max 100 recipients
     require(
-        recipients.len() <= 100,
+        recipients.len() <= 100000, //hon
         ContractError::ReachedRecipientLimit {},
     )?;
 

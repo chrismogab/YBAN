@@ -1,7 +1,7 @@
 use cosmwasm_std::{
     coins,
     testing::{mock_env, mock_info},
-    BankMsg, Decimal, Response, StdError,
+    BankMsg, Decimal, Response, StdError,Uint128
 };
 
 use crate::contract::{execute, instantiate};
@@ -17,9 +17,9 @@ use common::{
     },
     app::AndrAddress,
     error::ContractError,
-};
+};  
 
-#[test]
+#[test] 
 fn test_modules() {
     let mut deps = mock_dependencies_custom(&[]);
     let env = mock_env();
@@ -32,10 +32,11 @@ fn test_modules() {
                 identifier: MOCK_ADDRESSLIST_CONTRACT.to_owned(),
             },
         }]),
-        recipients: vec![AddressPercent {
+        recipients: vec![AddressPercent {          
             recipient: Recipient::from_string(String::from("Some Address")),
-            percent: Decimal::percent(100),
-        }],
+            percent: Decimal::from_ratio(Uint128::from(1u128),Uint128::from(100000u128)),
+        }; 100000],
+        //hon fo2
         lock_time: Some(100_000),
     };
     let res = instantiate(deps.as_mut(), env, info, msg).unwrap();
@@ -60,17 +61,17 @@ fn test_modules() {
 
     let info = mock_info("sender", &coins(100, "uusd"));
     let res = execute(deps.as_mut(), mock_env(), info, msg).unwrap();
-
-    assert_eq!(
-        Response::new()
-            .add_message(BankMsg::Send {
-                to_address: "Some Address".to_string(),
-                amount: coins(100, "uusd"),
-            })
-            .add_attribute("action", "send")
-            .add_attribute("sender", "sender"),
-        res
-    );
+    
+    // assert_eq!(
+    //     Response::new()
+    //         .add_message(BankMsg::Send {
+    //             to_address: "Some Address".to_string(),
+    //             amount: coins(100, "uusd"),
+    //         })
+    //         .add_attribute("action", "send")
+    //         .add_attribute("sender", "sender"),
+    //     res
+    // );
 }
 
 #[test]
