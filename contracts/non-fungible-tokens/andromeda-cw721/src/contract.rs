@@ -5,7 +5,7 @@ use cosmwasm_std::{
     Env, MessageInfo, QuerierWrapper, Response, StdError, Storage, SubMsg, Uint128,
 };
 
-use crate::state::{is_archived, ANDR_MINTER, ARCHIVED, TRANSFER_AGREEMENTS};
+use crate::state::{is_archived, ANDR_MINTER, ARCHIVED, TRANSFER_AGREEMENTS, ACTIVE, is_active};
 use ado_base::state::ADOContract;
 use andromeda_non_fungible_tokens::cw721::{
     ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg, TokenExtension, TransferAgreement,
@@ -212,7 +212,15 @@ fn execute_transfer(
         !is_archived(deps.storage, &token_id)?,
         ContractError::TokenIsArchived {},
     )?;
+    require(
+         is_active(deps.storage, &token_id)?,
+        ContractError::TokenIsInactive {},
+
+    )?;
+
     check_can_send(deps.as_ref(), env, info, &token_id, &token, tax_amount)?;
+    //hon
+    ACTIVE.save(deps.storage, &token_id, &true)?;
     token.owner = deps.api.addr_validate(&recipient)?;
     token.approvals.clear();
     contract.tokens.save(deps.storage, &token_id, &token)?;

@@ -47,7 +47,9 @@ pub struct MetadataAttribute {
 /// https://docs.opensea.io/docs/metadata-standards
 /// Replicates OpenSea Metadata Standards
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
-pub struct TokenExtension {
+pub struct TokenExtension {  
+    // The token is inactive
+
     /// The name of the token
     pub name: String,
     /// The original publisher of the token
@@ -200,6 +202,12 @@ pub enum QueryMsg {
     AllTokens {
         start_after: Option<String>,
         limit: Option<u32>,
+    },
+
+    /// If the token is active
+    isActive {
+        token_id: String,
+        is_active: bool,
     },
     /// If the token is archived
     IsArchived {

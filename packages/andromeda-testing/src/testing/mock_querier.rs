@@ -281,6 +281,7 @@ impl WasmMockQuerier {
             Cw721QueryMsg::NftInfo { token_id } => {
                 let extension = if token_id == "original_token_id" {
                     TokenExtension {
+
                         name: "wrapped_token_id".to_owned(),
                         publisher: "sender".to_owned(),
                         description: None,
@@ -304,6 +305,7 @@ impl WasmMockQuerier {
                     }
                 } else {
                     TokenExtension {
+
                         name: token_id,
                         publisher: "sender".to_owned(),
                         description: None,
