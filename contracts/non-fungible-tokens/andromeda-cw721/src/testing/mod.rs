@@ -1,3 +1,4 @@
+use ado_base::modules;
 use cosmwasm_std::{
     attr, coin, coins, from_binary,
     testing::{mock_dependencies, mock_env, mock_info},
@@ -500,6 +501,91 @@ fn test_agreed_transfer_nft_wildcard() {
     assert_eq!(resp.owner, String::from("recipient"))
 }
 
+// honn
+#[test]
+fn test_not_active() {
+
+let token_id = String::from("testtoken");
+let creator = String::from("creator");
+let mut deps =  mock_dependencies();
+let env = mock_env();
+init_setup(deps.as_mut(), env.clone(),None);
+mint_token(
+    deps.as_mut(),
+    env.clone(),
+    token_id.clone(),
+    creator.clone(),
+    TokenExtension {
+        description: None,
+        name: String::default(),
+        publisher: creator.clone(),
+        attributes: vec![],
+        image: String::from(""),
+        image_data: None,
+        external_url: None,
+        animation_url: None,
+        youtube_url: None,
+    },
+);
+
+    let query_msg = QueryMsg::IsActive { token_id };
+    let query_resp = query(deps.as_ref(), env, query_msg).unwrap();
+    let resp: bool = from_binary(&query_resp).unwrap();
+    assert!(!resp)
+
+
+
+}
+
+ 
+#[test]
+
+fn test_active() {
+
+let token_id = String::from("testtoken");
+let creator = String::from("creator");
+let mut deps =  mock_dependencies();
+let env = mock_env();
+init_setup(deps.as_mut(), env.clone(),None);
+mint_token(
+    deps.as_mut(),
+    env.clone(),
+    token_id.clone(),
+    creator.clone(),
+    TokenExtension {
+        description: None,
+        name: String::default(),
+        publisher: creator.clone(),
+        attributes: vec![],
+        image: String::from(""),
+        image_data: None,
+        external_url: None,
+        animation_url: None,
+        youtube_url: None,
+    },
+);
+let msg = ExecuteMsg::TransferNft { recipient: "anyone".to_string(), token_id: token_id.clone() } ;
+
+let unauth_info = mock_info("anyone", &[]);
+    assert_eq!(
+        execute(deps.as_mut(), env.clone(), unauth_info, msg.clone()).unwrap_err(),
+        ContractError::Unauthorized {}
+    );
+    let info = mock_info(creator.as_str(), &[]);
+    assert!(execute(deps.as_mut(), env.clone(), info, msg).is_ok());
+
+    let query_msg = QueryMsg::IsActive { token_id };
+    let query_resp = query(deps.as_ref(), env, query_msg).unwrap();
+    let resp: bool = from_binary(&query_resp).unwrap();
+    assert!(resp)
+
+}
+
+
+
+
+
+  
 #[test]
 fn test_archive() {
     let token_id = String::from("testtoken");

@@ -40,8 +40,8 @@ pub fn instantiate(
     msg.validate()?;
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
     // Max 100 recipients
-    require(
-        msg.recipients.len() <= 100000, // hon
+    require( 
+        msg.recipients.len() <= 5000, // hon
         ContractError::ReachedRecipientLimit {},
     )?;
     let current_time = env.block.time.seconds();
@@ -224,7 +224,7 @@ fn execute_update_recipients(
     )?;
     // Max 100 recipients
     require(
-        recipients.len() <= 100000, //hon
+        recipients.len() <= 5000, //hon
         ContractError::ReachedRecipientLimit {},
     )?;
 

@@ -18,7 +18,12 @@ pub fn is_archived(storage: &dyn Storage, token_id: &str) -> Result<bool, Contra
 pub fn is_active(storage: &dyn Storage, token_id: &str) -> Result<bool, ContractError> {
     let active_opt = ACTIVE.may_load(storage, token_id)?.unwrap_or(false);
     Ok(active_opt)    
-}
+} 
+
+
+
+
+
 
 
 

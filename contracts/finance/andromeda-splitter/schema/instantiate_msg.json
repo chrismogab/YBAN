@@ -2,15 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "InstantiateMsg",
   "type": "object",
-  "required": [
-    "recipients"
-  ],
+  "required": ["recipients"],
   "properties": {
     "modules": {
-      "type": [
-        "array",
-        "null"
-      ],
+      "type": ["array", "null"],
       "items": {
         "$ref": "#/definitions/Module"
       }
@@ -27,9 +22,7 @@
     "ADORecipient": {
       "description": "ADOs use a default Receive message for handling funds, this struct states that the recipient is an ADO and may attach the data field to the Receive message",
       "type": "object",
-      "required": [
-        "address"
-      ],
+      "required": ["address"],
       "properties": {
         "address": {
           "description": "Addr can also be a human-readable identifier used in a app contract.",
@@ -53,10 +46,7 @@
     },
     "AddressPercent": {
       "type": "object",
-      "required": [
-        "percent",
-        "recipient"
-      ],
+      "required": ["percent", "recipient"],
       "properties": {
         "percent": {
           "$ref": "#/definitions/Decimal"
@@ -68,9 +58,7 @@
     },
     "AndrAddress": {
       "type": "object",
-      "required": [
-        "identifier"
-      ],
+      "required": ["identifier"],
       "properties": {
         "identifier": {
           "description": "Can be either an address or identifier of an ADO in a app.",
@@ -89,11 +77,7 @@
     "Module": {
       "description": "Modules can be instantiated in two different ways New - Provide an instantiation message for the contract, a new contract will be instantiated and the address recorded Address - Provide an address for an already instantiated module contract A struct describing a token module, provided with the instantiation message this struct is used to record the info about the module and how/if it should be instantiated",
       "type": "object",
-      "required": [
-        "address",
-        "is_mutable",
-        "module_type"
-      ],
+      "required": ["address", "is_mutable", "module_type"],
       "properties": {
         "address": {
           "$ref": "#/definitions/AndrAddress"
@@ -111,9 +95,7 @@
         {
           "description": "An address that is not another ADO. It is assumed that it is a valid address.",
           "type": "object",
-          "required": [
-            "addr"
-          ],
+          "required": ["addr"],
           "properties": {
             "addr": {
               "type": "string"
@@ -123,9 +105,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "a_d_o"
-          ],
+          "required": ["a_d_o"],
           "properties": {
             "a_d_o": {
               "$ref": "#/definitions/ADORecipient"

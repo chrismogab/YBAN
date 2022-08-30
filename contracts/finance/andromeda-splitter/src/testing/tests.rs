@@ -34,10 +34,10 @@ fn test_modules() {
         }]),
         recipients: vec![AddressPercent {          
             recipient: Recipient::from_string(String::from("Some Address")),
-            percent: Decimal::from_ratio(Uint128::from(1u128),Uint128::from(100000u128)),
-        }; 100000],
+            percent: Decimal::from_ratio(Uint128::from(1u128),Uint128::from(5000u128)),
+        }; 5000],
         //hon fo2
-        lock_time: Some(100_000),
+        lock_time: Some(100_000), 
     };
     let res = instantiate(deps.as_mut(), env, info, msg).unwrap();
     let expected_res = Response::new()

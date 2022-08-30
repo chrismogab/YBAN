@@ -13,7 +13,7 @@ use andromeda_non_fungible_tokens::cw721::{
 use cw2::{get_contract_version, set_contract_version};
 use semver::Version;
 
-use common::{
+use common::{  
     ado_base::{
         hooks::{AndromedaHook, OnFundsTransferResponse},
         AndromedaMsg, InstantiateMsg as BaseInstantiateMsg,
@@ -165,7 +165,7 @@ fn execute_transfer(
     // Reduce all responses into one.
     let mut resp = responses
         .into_iter()
-        .reduce(|resp, r| {
+        .reduce(|resp, r| {   
             resp.add_submessages(r.messages)
                 .add_events(r.events)
                 .add_attributes(r.attributes)
@@ -212,15 +212,12 @@ fn execute_transfer(
         !is_archived(deps.storage, &token_id)?,
         ContractError::TokenIsArchived {},
     )?;
-    require(
-         is_active(deps.storage, &token_id)?,
-        ContractError::TokenIsInactive {},
-
-    )?;
-
+ 
     check_can_send(deps.as_ref(), env, info, &token_id, &token, tax_amount)?;
     //hon
-    ACTIVE.save(deps.storage, &token_id, &true)?;
+     if !token.active {
+        ACTIVE.save(deps.storage, &token_id, &true)?;
+    }
     token.owner = deps.api.addr_validate(&recipient)?;
     token.approvals.clear();
     contract.tokens.save(deps.storage, &token_id, &token)?;
@@ -389,6 +386,7 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> Result<Binary, ContractErro
         QueryMsg::AndrHook(msg) => handle_andr_hook(deps, msg),
         QueryMsg::AndrQuery(msg) => ADOContract::default().query(deps, env, msg, query),
         QueryMsg::IsArchived { token_id } => Ok(to_binary(&is_archived(deps.storage, &token_id)?)?),
+        QueryMsg::IsActive { token_id } =>Ok(to_binary(&is_active(deps.storage, &token_id)?)?),
         QueryMsg::TransferAgreement { token_id } => {
             Ok(to_binary(&query_transfer_agreement(deps, token_id)?)?)
         }

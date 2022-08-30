@@ -48,7 +48,6 @@ pub struct MetadataAttribute {
 /// Replicates OpenSea Metadata Standards
 #[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug)]
 pub struct TokenExtension {  
-    // The token is inactive
 
     /// The name of the token
     pub name: String,
@@ -116,6 +115,7 @@ pub enum ExecuteMsg {
     Archive {
         token_id: String,
     },
+
     /// Assigns a `TransferAgreement` for a token
     TransferAgreement {
         token_id: String,
@@ -205,9 +205,8 @@ pub enum QueryMsg {
     },
 
     /// If the token is active
-    isActive {
+    IsActive {
         token_id: String,
-        is_active: bool,
     },
     /// If the token is archived
     IsArchived {
