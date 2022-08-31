@@ -218,6 +218,11 @@ fn execute_transfer(
      if ACTIVE.may_load(deps.storage, &token_id) == Ok(None) {
         ACTIVE.save(deps.storage, &token_id, &true)?;
     }
+
+    require(
+        is_active(deps.storage, &token_id)?,
+        ContractError::TokenIsInactive  {},
+    )?;
     token.owner = deps.api.addr_validate(&recipient)?;
     token.approvals.clear();
     contract.tokens.save(deps.storage, &token_id, &token)?;
