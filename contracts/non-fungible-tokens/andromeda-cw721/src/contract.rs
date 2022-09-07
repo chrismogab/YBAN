@@ -214,7 +214,7 @@ fn execute_transfer(
     )?;
  
     check_can_send(deps.as_ref(), env, info, &token_id, &token, tax_amount)?;
-    //hon
+    //honn
      if ACTIVE.may_load(deps.storage, &token_id) == Ok(None) {
         ACTIVE.save(deps.storage, &token_id, &true)?;
     }
